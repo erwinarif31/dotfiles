@@ -8,6 +8,17 @@ style = "Beam"
 [font]
 size = 9.0
 
+[font.normal]
+family = "Firacode Nerd Font"
+style = "Regular"
+
+[font.bold]
+family = "Firacode Nerd Font"
+style = "Bold"
+
+[font.italic]
+family = "Firacode Nerd Font"
+
 [window]
 startup_mode = "Windowed"
 dynamic_padding = true
