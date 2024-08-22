@@ -1,22 +1,29 @@
--- lua/user/format.lua
+-- lua/custom/plugins/format.lua
+
 local M = {}
 
-function M.format_changed_lines()
-  local gitsigns = require 'gitsigns'
-  local conform = require 'conform'
+M.format_changed_lines = function()
+  local gitsigns = require('gitsigns')
+  local changed_lines = {}
 
+  -- Get the hunks from gitsigns
   local hunks = gitsigns.get_hunks()
-  local format = conform.format
 
-  for i = #hunks, 1, -1 do
-    local hunk = hunks[i]
-    if hunk ~= nil and hunk.type ~= 'delete' then
-      local start = hunk.added.start
-      local last = start + hunk.added.count
-      local last_hunk_line = vim.api.nvim_buf_get_lines(0, last - 2, last - 1, true)[1]
-      local range = { start = { start, 0 }, ['end'] = { last - 1, last_hunk_line:len() } }
-      format { range = range }
+  if not hunks then return end
+
+  for _, hunk in ipairs(hunks) do
+    local start = hunk.added.start
+    local count = hunk.added.count
+
+    -- Collect all changed lines
+    for i = start, start + count - 1 do
+      table.insert(changed_lines, i)
     end
+  end
+
+  -- Format the collected lines
+  for _, lnum in ipairs(changed_lines) do
+    vim.cmd(lnum .. "normal! gq")
   end
 end
 

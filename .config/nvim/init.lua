@@ -115,7 +115,6 @@ vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 
-
 -- Sync clipboard between OS and Neovim.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
@@ -155,7 +154,7 @@ vim.opt.listchars = { tab = '| ', trail = '·', nbsp = '␣' }
 vim.opt.inccommand = 'split'
 
 vim.opt.wrap = false
-vim.opt.colorcolumn = "80"
+vim.opt.colorcolumn = '80'
 
 -- Show which line your cursor is on
 vim.opt.cursorline = true
@@ -654,6 +653,14 @@ require('lazy').setup({
         mode = '',
         desc = '[F]ormat buffer',
       },
+      {
+        '<leader>fc',
+        function()
+          vim.cmd 'DiffFormat'
+        end,
+        mode = '',
+        desc = '[F]ormat changed lines',
+      },
     },
     opts = {
       notify_on_error = false,
@@ -857,7 +864,7 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'php' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -899,7 +906,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
   require 'custom.plugins.harpoon',
   require 'custom.plugins.copilot',
@@ -940,3 +947,39 @@ require('lazy').setup({
 -- VIM dadbod
 -- Connection:
 vim.g.db = 'mariadb://praktikum:praktikum@localhost/classicmodels'
+
+vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
+  pattern = '*.blade.php',
+  callback = function()
+    vim.bo.filetype = 'php'
+  end,
+})
+
+vim.api.nvim_create_user_command('DiffFormat', function()
+  local lines = vim.fn.system('git diff --unified=0'):gmatch '[^\n\r]+'
+  local ranges = {}
+  for line in lines do
+    if line:find '^@@' then
+      local line_nums = line:match '%+.- '
+      if line_nums:find ',' then
+        local _, _, first, second = line_nums:find '(%d+),(%d+)'
+        table.insert(ranges, {
+          start = { tonumber(first), 0 },
+          ['end'] = { tonumber(first) + tonumber(second), 0 },
+        })
+      else
+        local first = tonumber(line_nums:match '%d+')
+        table.insert(ranges, {
+          start = { first, 0 },
+          ['end'] = { first + 1, 0 },
+        })
+      end
+    end
+  end
+  local format = require('conform').format
+  for _, range in pairs(ranges) do
+    format {
+      range = range,
+    }
+  end
+end, { desc = 'Format changed lines' })
