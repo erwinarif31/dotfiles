@@ -201,3 +201,5 @@ for_window [class="^.*"] border pixel 2
 exec variety
 
 bindsym $mod+Shift+x exec --no-startup-id systemctl suspend & i3lock -n
+
+exec --no-startup-id xset s off -dpms

@@ -5,6 +5,8 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+
+export PATH=$PATH:$HOME/go/bin
 export PATH="$PATH:$HOME/.config/composer/vendor/bin"
 export PATH=$PATH:/usr/bin/nvim
 
@@ -125,3 +127,17 @@ EOL
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 eval "$(fzf --zsh)"
+
+pomo() {
+    arg1=$1
+    shift
+    args="$*"
+
+    min=${arg1:?Example: pomo 15 Take a break}
+    sec=$((min * 60))
+    msg="${args:?Example: pomo 15 Take a break}"
+
+    while true; do
+        date '+%H:%M' && sleep "${sec:?}" && notify-send -u critical -t 0 -a pomo "${msg:?}"
+    done
+}
