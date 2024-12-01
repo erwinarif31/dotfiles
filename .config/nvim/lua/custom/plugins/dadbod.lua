@@ -14,10 +14,14 @@ return {
     -- Your DBUI configuration
     vim.g.db_ui_use_nerd_fonts = 1
 
-    -- Connection:
     vim.env.MYSQL_PWD = 'password01'
-    -- Classicmodels Database
-    vim.g.db = 'mysql://user01@localhost/classicmodels'
-    vim.g.db = 'mysql://user01@localhost/large_database'
+
+    vim.g.dbs = {
+      { name = 'classicmodels', url = 'mysql://user01@localhost:3306/classicmodels' },
+      { name = 'large_database', url = 'mysql://user01@localhost:3306/large_database' },
+      { name = 'large_database_1', url = 'mysql://user01@localhost:3306/large_database_1' },
+      { name = 'library', url = 'mysql://user01@localhost:3306/library' },
+      { name = 'sakila', url = 'mysql://user01@localhost:3306/sakila' },
+    }
   end,
 }

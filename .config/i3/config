@@ -198,8 +198,15 @@ exec xinput set-prop "MSFT0004:00 06CB:CE2C Touchpad" "libinput Tapping Enabled"
 
 for_window [class="^.*"] border pixel 2
 
-exec variety
-
 bindsym $mod+Shift+x exec --no-startup-id systemctl suspend & i3lock -n
+bindsym $mod+x exec --no-startup-id i3lock -n
 
 exec --no-startup-id xset s off -dpms
+
+# move to workspace 3 and exec command
+bindsym $mod+Shift+w workspace $ws9; exec cohesion
+
+bindsym $mod+Shift+o workspace $ws3, exec echo "Second" 
+
+
+bindsym Print exec maim -s -u | xclip -selection clipboard -t image/png -i

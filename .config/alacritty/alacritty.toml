@@ -6,7 +6,7 @@ program = "/usr/bin/zsh"
 style = "Beam"
 
 [font]
-size = 9.0
+size = 8.0
 
 [font.normal]
 family = "Firacode Nerd Font"

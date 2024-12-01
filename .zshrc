@@ -9,6 +9,8 @@ fi
 export PATH=$PATH:$HOME/go/bin
 export PATH="$PATH:$HOME/.config/composer/vendor/bin"
 export PATH=$PATH:/usr/bin/nvim
+export PATH=$PATH:~/go/bin
+
 
 
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"

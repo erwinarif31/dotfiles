@@ -508,14 +508,6 @@ require('lazy').setup({
         mode = '',
         desc = '[F]ormat buffer',
       },
-      {
-        '<leader>fc',
-        function()
-          vim.cmd 'DiffFormat'
-        end,
-        mode = '',
-        desc = '[F]ormat changed lines',
-      },
     },
     opts = {
       notify_on_error = false,
@@ -767,6 +759,8 @@ require('lazy').setup({
   require 'custom.plugins.copilot',
   require 'custom.plugins.git-blame',
   require 'custom.plugins.dadbod',
+  require 'custom.plugins.distant',
+  require 'custom.plugins.diffview',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
