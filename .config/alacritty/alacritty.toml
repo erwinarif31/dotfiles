@@ -50,3 +50,7 @@ foreground = "#f8f8f2"
 text = "CellBackground"
 cursor = "CellForeground"
 
+[[keyboard.bindings]]
+key = "K"
+mods = "Control"
+command = { program = "/usr/bin/zsh", args = ["-c", "echo 'Keybind works!' && read"] }
