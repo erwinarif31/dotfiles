@@ -8,7 +8,7 @@ fi
 
 export PATH=$PATH:$HOME/go/bin
 export PATH="$PATH:$HOME/.config/composer/vendor/bin"
-export PATH=$PATH:/usr/bin/nvim
+export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 export PATH=$PATH:~/go/bin
 
 export PATH="$HOME/.local/bin:$PATH"
@@ -29,11 +29,12 @@ zinit light Aloxaf/fzf-tab
 autoload -U compinit && compinit
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # keybinding
 bindkey -e
 bindkey '^p' history-search-backward
+bindkey -s "^k" "tmux_sessionizer\n"
 bindkey '^n' history-search-forward
 
 # History
@@ -60,7 +61,26 @@ zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 alias ls='ls --color'
 alias vim='nvim'
 alias c='clear'
+alias gst='git status'
+alias gcm='git commit -m'
+alias gco='git checkout'
+alias gf='git fetch'
+alias gpl='git pull'
+alias gp='git push'
+alias gpo='git push origin'
+alias glo='git log --oneline'
+alias ga='git add'
+alias gac='git commit -am'
 
+alias dcup='docker compose up -d'
+alias dlog='docker logs -f'
+alias dps='docker ps'
+alias dstop='docker stop'
+alias drm='docker rm'
+alias dcdown='docker compose down'
+
+alias ta='tmux attach'
+alias td='tmux detach'
 
 # PERSONAL
 cpr() {
@@ -126,7 +146,21 @@ EOL
     echo "Created $1 with the competitive programming template."
 }
 
-bindkey -s "^k" "tmux_sessionizer\n"
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 eval "$(fzf --zsh)"
+
+# if [ -f ~/.dircolors ]; then
+#     eval "$(dircolors -b ~/.dircolors)"
+# fi
+# export LS_COLORS=$(echo $LS_COLORS | sed 's/ln=[^:]*:/ln=:/')
+# alias ls='ls --color=auto'
+
+
+export PATH=$PATH:/home/winny/.spicetify
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+source ~/powerlevel10k/powerlevel10k.zsh-theme
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
