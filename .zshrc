@@ -60,17 +60,90 @@ zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 # Aliases
 alias ls='ls --color'
 alias vim='nvim'
-alias c='clear'
-alias gst='git status'
-alias gcm='git commit -m'
-alias gco='git checkout'
-alias gf='git fetch'
-alias gpl='git pull'
-alias gp='git push'
-alias gpo='git push origin'
-alias glo='git log --oneline'
+
+# --- [G]it [S]tatus ---
+alias gst='git status -sb' # Verbose is good, but short and branch-aware is faster.
+
+# --- [G]it [A]dd ---
 alias ga='git add'
-alias gac='git commit -am'
+alias gaa='git add --all' # Add all changes, tracked or untracked.
+alias gapa='git add --patch' # The real magic. Interactively stage chunks of code.
+
+# --- [G]it [C]ommit ---
+alias gcm='git commit -m'
+alias gac='git commit -am' # Your existing 'add and commit'
+alias gca='git commit --amend --no-edit' # Add staged changes to the previous commit without changing the message.
+
+# --- [G]it [C]heckout / [S]witch ---
+alias gco='git checkout'
+alias gsw='git switch'     # Modern, safer way to switch branches.
+alias gsc='git switch -c'  # Create and switch to a new branch.
+
+# --- [G]it [B]ranch ---
+alias gb='git branch'
+alias gbd='git branch -D' # Force delete a local branch.
+
+# --- [G]it [F]etch / [P]ull ---
+alias gf='git fetch --all --jobs=10' # Fetch from all remotes, and prune deleted branches.
+alias gpl='git pull --rebase' # My personal favorite. Pull with rebase to keep a clean, linear history.
+alias gpl='git pull --rebase origin' # My personal favorite. Pull with rebase to keep a clean, linear history.
+
+# --- [G]it [P]ush ---
+alias gp='git push'
+alias gpo='git push origin $(git branch --show-current)'
+# THE FIRST PUSH: Push the current branch and set its upstream remote branch. No more copy-pasting!
+alias gpsu='git push --set-upstream origin $(git branch --show-current)'
+
+# --- [G]it [L]og ---
+alias glo='git log --oneline -n 15' # Your oneline log, but limited to the last 15 commits.
+# THE POWER LOG: A beautiful, graphical log of all branches. This is a game-changer.
+alias glg='git log --graph --abbrev-commit --decorate --format=format:"%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)" --all'
+
+# --- [G]it [D]iff ---
+alias gd='git diff'
+alias gds='git diff --staged' # Show changes that are staged for the next commit.
+
+# --- [G]it [U]ndo ---
+alias gundo='git restore .' # Discard all unstaged changes in the current directory.
+alias gunstage='git restore --staged .' # Unstage all staged files.
+alias guncommit='git reset --soft HEAD~1' # Undo the last commit, but keep all changes staged. Perfect for quick fixes.
+
+# --- More [G]it ---
+# Shows new commits on a target branch (like main) since your current branch was created.
+# Usage: gcatchup <target_branch>
+gcatchup() {
+  # 1. Check for a target branch argument
+  if [[ -z "$1" ]]; then
+    echo "❗️ Usage: gcatchup <branch_to_check>"
+    echo "   Example: gcatchup main"
+    return 1
+  fi
+
+  # 2. Get branch names
+  local target_branch="$1"
+  local current_branch
+  current_branch=$(git branch --show-current)
+
+  if [[ "$current_branch" == "$target_branch" ]]; then
+    echo "🧐 You are already on the '$target_branch' branch."
+    return 0
+  fi
+
+  # 3. Find the common ancestor (the branch point)
+  local merge_base
+  merge_base=$(git merge-base "$current_branch" "$target_branch" 2>/dev/null)
+
+  if [[ -z "$merge_base" ]]; then
+      echo "❗️ Could not find a common ancestor between '$current_branch' and '$target_branch'."
+      return 1
+  fi
+
+  # 4. Display the results using the glg format
+  echo "🔎 Showing new commits on \033[33m$target_branch\033[0m since you branched off."
+  echo "------------------------------------------------------------------------"
+
+  git log --graph --abbrev-commit --decorate --format=format:"%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)" "$merge_base..$target_branch"
+}
 
 alias dcup='docker compose up -d'
 alias dlog='docker logs -f'
@@ -154,6 +227,7 @@ eval "$(fzf --zsh)"
 # fi
 # export LS_COLORS=$(echo $LS_COLORS | sed 's/ln=[^:]*:/ln=:/')
 # alias ls='ls --color=auto'
+
 
 
 export PATH=$PATH:/home/winny/.spicetify

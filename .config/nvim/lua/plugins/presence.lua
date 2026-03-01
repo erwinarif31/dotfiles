@@ -7,14 +7,15 @@ return {
     },
     text = {
       workspace = function(opts)
-        local prefix = "Working on "
-        local name = opts.workspace
-        if #name > 3 then
-          name = name:sub(1, 3) .. "***"
-          return prefix .. name
-        else
-          return prefix .. name
-        end
+            return "Working on a project"
+        -- local prefix = "Working on "
+        -- local name = opts.workspace
+        -- if #name > 3 then
+        --   name = name:sub(1, 3) .. "***"
+        --   return prefix .. name
+        -- else
+        --   return prefix .. name
+        -- end
       end,
     },
     idle = {

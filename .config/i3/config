@@ -41,8 +41,8 @@ exec --no-startup-id nm-applet
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_i3status
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
@@ -71,10 +71,10 @@ bindsym $mod+d exec --no-startup-id dmenu_run
 bindsym $mod+Shift+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
-bindsym $mod+h focus left
-bindsym $mod+j focus down
-bindsym $mod+k focus up
-bindsym $mod+l focus right
+bindsym $mod+j focus left
+bindsym $mod+k focus down
+bindsym $mod+l focus up
+bindsym $mod+semicolon focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
@@ -216,10 +216,11 @@ for_window [class="^.*"] border none
 for_window [class=".*"] title_format "<span foreground='#ffffff' background='#000000'>%title</span>"
 # for_window [class=".*"] title_format "<span foreground='#40E0D0' background='#000000'>%title</span>"
 
-bindsym $mod+Shift+x workspace $ws12, exec /bin/v3lock && systemctl suspend
+bindsym $mod+Shift+x workspace $ws12, exec /bin/v3lock && systemctl suspend && pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 bindsym $mod+x workspace $ws12, exec /bin/v3lock
 
 exec --no-startup-id xset s off -dpms
+exec --no-startup-id ~/Applications/activitywatch/aw-qt
 
 # app shortcuts
 bindsym $mod+Shift+w workspace $ws9; exec cohesion
@@ -227,8 +228,8 @@ bindsym $mod+Control+2 workspace $ws2; exec flatpak run app.zen_browser.zen -P D
 bindsym $mod+Control+3 workspace $ws3; exec flatpak run app.zen_browser.zen -P ai
 bindsym $mod+Control+6 workspace $ws6; exec flatpak run app.zen_browser.zen -P jobs
 bindsym $mod+Control+8 workspace $ws8; exec flatpak run app.zen_browser.zen -P dev
-bindsym $mod+Control+9 workspace $ws9; exec flatpak run app.zen_browser.zen -P notion
-bindsym $mod+Control+0 workspace $ws10; exec flatpak run app.zen_browser.zen -P player
+bindsym $mod+Control+0 workspace $ws10; exec flatpak run app.zen_browser.zen -P notion
+bindsym $mod+Control+minus workspace $ws11; exec flatpak run app.zen_browser.zen -P player
 
 bindsym Print exec maim -s -u | xclip -selection clipboard -t image/png -i
 
@@ -237,3 +238,6 @@ client.focused_inactive #222222 #222222 #aaaaaa #333333
 client.unfocused        #111111 #111111 #888888 #222222
 client.urgent          #900000 #900000 #ffffff #900000
 client.placeholder     #111111 #111111 #555555 #111111
+
+bindsym $mod+Shift+Tab move scratchpad
+bindsym $mod+Tab scratchpad show
